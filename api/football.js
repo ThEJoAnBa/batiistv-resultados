@@ -1,7 +1,8 @@
 export default async function handler(req, res) {
   try {
     const token = process.env.FOOTBALL_DATA_API_TOKEN;
-
+const bbsToken = process.env.BBS_API_KEY;
+    console.log("BBS_API_KEY configurada:", !!bbsToken);
     if (!token) {
       return res.status(500).json({
         error: "Falta configurar FOOTBALL_DATA_API_TOKEN en Vercel."
