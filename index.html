@@ -184,28 +184,20 @@
 
 <script>
 
-const LIGAS = [
-  {
-    nombre: "Mundial",
-    id: 1
-  },
-  {
-    nombre: "Premier League",
-    id: 15
-  },
-  {
-    nombre: "LaLiga",
-    id: 10
-  },
-  {
-    nombre: "Champions League",
-    id: 2
-  },
-  {
-    nombre: "Europa League",
-    id: 3
-  }
-];
+const COMPETICIONES = {
+  PL: "Premier League",
+  PD: "LaLiga",
+  BL1: "Bundesliga",
+  SA: "Serie A",
+  FL1: "Ligue 1",
+  CL: "Champions League",
+  EL: "Europa League",
+  PPL: "Primeira Liga",
+  ELC: "Championship",
+  BSA: "Brasileirão",
+  WC: "Mundial",
+  EC: "Eurocopa"
+};
 
 async function cargarPartidos() {
 
@@ -223,169 +215,206 @@ async function cargarPartidos() {
 
     console.log("Datos recibidos:", datos);
 
-    const partidos =
-      datos.matches ||
-      datos.data?.matches ||
-      [];
+    const partidos = datos.matches || [];
 
-    contenedor.innerHTML = "";
+    if (!partidos.length) {
 
-    /*
-      Creamos siempre las 5 ligas.
-      Si una liga no tiene partidos ese día,
-      mostramos "No hay partidos".
-    */
-
-    LIGAS.forEach(liga => {
-
-      const partidosLiga = partidos.filter(partido => {
-
-        return Number(partido.league?.league_id) === liga.id;
-
-      });
-
-      const ligaHTML = document.createElement("div");
-
-      ligaHTML.className = "league";
-
-      ligaHTML.innerHTML = `
-        <div class="league-header">
-          ${liga.nombre}
+      contenedor.innerHTML = `
+        <div class="no-games">
+          No hay partidos disponibles.
         </div>
       `;
 
-      if (partidosLiga.length === 0) {
+      return;
+    }
 
-        ligaHTML.innerHTML += `
-          <div class="no-games">
-            No hay partidos hoy
+    const grupos = {};
+
+    partidos.forEach(partido => {
+
+      const codigo =
+        partido.competition?.code;
+
+      if (!COMPETICIONES[codigo]) {
+        return;
+      }
+
+      if (!grupos[codigo]) {
+        grupos[codigo] = [];
+      }
+
+      grupos[codigo].push(partido);
+
+    });
+
+    contenedor.innerHTML = "";
+
+    Object.entries(COMPETICIONES).forEach(
+      ([codigo, nombre]) => {
+
+        const partidosLiga =
+          grupos[codigo] || [];
+
+        const ligaHTML =
+          document.createElement("div");
+
+        ligaHTML.className = "league";
+
+        ligaHTML.innerHTML = `
+          <div class="league-header">
+            ${nombre}
           </div>
         `;
 
-      } else {
+        if (!partidosLiga.length) {
 
-        partidosLiga.forEach(partido => {
-
-          const local =
-            partido.home_team?.team_name ||
-            "Local";
-
-          const visitante =
-            partido.away_team?.team_name ||
-            "Visitante";
-
-          const logoLocal =
-            partido.home_team?.team_logo ||
-            "";
-
-          const logoVisitante =
-            partido.away_team?.team_logo ||
-            "";
-
-          const estado =
-            partido.status_localized ||
-            "Scheduled";
-
-          let hora = "";
-
-          if (partido.match_date) {
-
-            const fecha = new Date(
-              partido.match_date.replace(" ", "T") + "Z"
-            );
-
-            hora = fecha.toLocaleTimeString(
-              "es-ES",
-              {
-                hour: "2-digit",
-                minute: "2-digit"
-              }
-            );
-
-          }
-
-          let marcador;
-
-          if (
-            estado.toLowerCase().includes("scheduled")
-          ) {
-
-            marcador = hora;
-
-          } else {
-
-            marcador = `
-              ${partido.score?.home ?? 0}
-              -
-              ${partido.score?.away ?? 0}
-            `;
-
-          }
-
-          const partidoHTML =
-            document.createElement("div");
-
-          partidoHTML.className = "match";
-
-          partidoHTML.innerHTML = `
-
-            <div class="team home">
-
-              <span>
-                ${local}
-              </span>
-
-              ${
-                logoLocal
-                  ? `<img
-                      src="${logoLocal}"
-                      alt="${local}"
-                    >`
-                  : ""
-              }
-
+          ligaHTML.innerHTML += `
+            <div class="no-games">
+              No hay partidos hoy
             </div>
-
-            <div class="center">
-
-              <div class="time">
-                ${marcador}
-              </div>
-
-              <span class="status">
-                ${estado}
-              </span>
-
-            </div>
-
-            <div class="team away">
-
-              ${
-                logoVisitante
-                  ? `<img
-                      src="${logoVisitante}"
-                      alt="${visitante}"
-                    >`
-                  : ""
-              }
-
-              <span>
-                ${visitante}
-              </span>
-
-            </div>
-
           `;
 
-          ligaHTML.appendChild(partidoHTML);
+        } else {
 
-        });
+          partidosLiga.forEach(partido => {
+
+            const local =
+              partido.homeTeam?.name ||
+              "Local";
+
+            const visitante =
+              partido.awayTeam?.name ||
+              "Visitante";
+
+            const logoLocal =
+              partido.homeTeam?.crest ||
+              "";
+
+            const logoVisitante =
+              partido.awayTeam?.crest ||
+              "";
+
+            const estado =
+              partido.status ||
+              "SCHEDULED";
+
+            let hora = "";
+
+            if (partido.utcDate) {
+
+              const fecha =
+                new Date(partido.utcDate);
+
+              hora =
+                fecha.toLocaleTimeString(
+                  "es-ES",
+                  {
+                    hour: "2-digit",
+                    minute: "2-digit"
+                  }
+                );
+
+            }
+
+            let marcador = hora;
+
+            if (
+              estado === "IN_PLAY" ||
+              estado === "PAUSED" ||
+              estado === "FINISHED"
+            ) {
+
+              marcador = `
+                ${partido.score?.fullTime?.home ?? 0}
+                -
+                ${partido.score?.fullTime?.away ?? 0}
+              `;
+
+            }
+
+            let estadoTexto = "Programado";
+
+            if (estado === "IN_PLAY") {
+              estadoTexto = "EN DIRECTO";
+            }
+
+            if (estado === "PAUSED") {
+              estadoTexto = "DESCANSO";
+            }
+
+            if (estado === "FINISHED") {
+              estadoTexto = "Finalizado";
+            }
+
+            if (estado === "POSTPONED") {
+              estadoTexto = "Aplazado";
+            }
+
+            const partidoHTML =
+              document.createElement("div");
+
+            partidoHTML.className = "match";
+
+            partidoHTML.innerHTML = `
+
+              <div class="team home">
+
+                <span>
+                  ${local}
+                </span>
+
+                ${
+                  logoLocal
+                    ? `<img
+                        src="${logoLocal}"
+                        alt="${local}"
+                      >`
+                    : ""
+                }
+
+              </div>
+
+              <div class="center">
+
+                <div class="time">
+                  ${marcador}
+                </div>
+
+                <span class="status">
+                  ${estadoTexto}
+                </span>
+
+              </div>
+
+              <div class="team away">
+
+                ${
+                  logoVisitante
+                    ? `<img
+                        src="${logoVisitante}"
+                        alt="${visitante}"
+                      >`
+                    : ""
+                }
+
+                <span>
+                  ${visitante}
+                </span>
+
+              </div>
+
+            `;
+
+            ligaHTML.appendChild(partidoHTML);
+
+          });
+
+        }
+
+        contenedor.appendChild(ligaHTML);
 
       }
-
-      contenedor.appendChild(ligaHTML);
-
-    });
+    );
 
   } catch (error) {
 
