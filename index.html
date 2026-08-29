@@ -239,7 +239,54 @@ const COMPETICIONES = {
   WC: "Mundial",
   EC: "Eurocopa"
 };
+let fechaSeleccionada = new Date();
 
+function formatoFecha(fecha) {
+  const año = fecha.getFullYear();
+  const mes = String(fecha.getMonth() + 1).padStart(2, "0");
+  const dia = String(fecha.getDate()).padStart(2, "0");
+
+  return `${año}-${mes}-${dia}`;
+}
+
+function mostrarFecha() {
+
+  const ahora = new Date();
+  const elemento = document.getElementById("fechaActual");
+
+  const seleccionada =
+    formatoFecha(fechaSeleccionada);
+
+  const hoy =
+    formatoFecha(ahora);
+
+  if (seleccionada === hoy) {
+    elemento.textContent = "Hoy";
+    return;
+  }
+
+  elemento.textContent =
+    fechaSeleccionada.toLocaleDateString(
+      "es-ES",
+      {
+        weekday: "long",
+        day: "numeric",
+        month: "long"
+      }
+    );
+}
+
+function cambiarDia(dias) {
+
+  fechaSeleccionada.setDate(
+    fechaSeleccionada.getDate() + dias
+  );
+
+  mostrarFecha();
+  cargarPartidos();
+}
+
+mostrarFecha();
 async function cargarPartidos() {
 
   const contenedor = document.getElementById("contenedor");
