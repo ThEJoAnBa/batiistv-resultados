@@ -1,13 +1,13 @@
 export default async function handler(req, res) {
+  const token = process.env.ZAFRONIX_API_KEY;
+
+  if (!token) {
+    return res.status(500).json({
+      error: "Falta configurar ZAFRONIX_API_KEY en Vercel"
+    });
+  }
+
   try {
-    const token = process.env.ZAFRONIX_API_KEY;
-
-    if (!token) {
-      return res.status(500).json({
-        error: "Falta configurar ZAFRONIX_API_KEY en Vercel."
-      });
-    }
-
     const response = await fetch(
       "https://api.zafronix.com/uefa/championsleague/v1/matches?year=2026",
       {
