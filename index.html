@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>BATIISTV - Resultados de fútbol</title>
 
   <style>
@@ -13,23 +14,28 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #f2f2f2;
-      color: #222;
+      background: #f3f4f6;
+      color: #111;
     }
 
     header {
       background: #168c45;
       color: white;
-      padding: 20px;
+      padding: 22px 15px;
       text-align: center;
     }
 
     header h1 {
       margin: 0;
+      font-size: 30px;
+    }
+
+    header p {
+      margin: 6px 0 0;
     }
 
     .container {
-      max-width: 900px;
+      max-width: 950px;
       margin: 25px auto;
       padding: 0 15px;
     }
@@ -37,56 +43,83 @@
     .date {
       background: white;
       padding: 15px;
-      margin-bottom: 15px;
+      border-radius: 10px;
+      margin-bottom: 18px;
       font-size: 20px;
       font-weight: bold;
-      border-radius: 8px;
     }
 
     .league {
       background: white;
+      border-radius: 10px;
       margin-bottom: 20px;
-      border-radius: 8px;
       overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,.06);
     }
 
-    .league-title {
+    .league-header {
       background: #168c45;
       color: white;
-      padding: 12px 16px;
+      padding: 13px 16px;
       font-weight: bold;
-      cursor: pointer;
+      font-size: 17px;
     }
 
     .match {
       display: grid;
-      grid-template-columns: 1fr auto 1fr;
+      grid-template-columns: 1fr 120px 1fr;
       align-items: center;
-      padding: 18px;
-      border-bottom: 1px solid #ddd;
+      padding: 17px 15px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .match:last-child {
+      border-bottom: none;
+    }
+
+    .team {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
     }
 
     .team.away {
+      justify-content: flex-start;
+    }
+
+    .team.home {
+      justify-content: flex-end;
       text-align: right;
     }
 
-    .score {
+    .team img {
+      width: 34px;
+      height: 34px;
+      object-fit: contain;
+    }
+
+    .center {
       text-align: center;
       font-weight: bold;
-      padding: 0 20px;
+    }
+
+    .time {
+      font-size: 18px;
     }
 
     .status {
       display: block;
+      margin-top: 5px;
       font-size: 12px;
       color: #777;
-      margin-top: 5px;
+      font-weight: normal;
     }
 
     .empty {
       background: white;
-      padding: 20px;
-      border-radius: 8px;
+      padding: 25px;
+      border-radius: 10px;
       text-align: center;
     }
 
@@ -94,6 +127,25 @@
       text-align: center;
       padding: 30px;
       color: #777;
+    }
+
+    @media (max-width: 600px) {
+      .match {
+        grid-template-columns: 1fr 75px 1fr;
+      }
+
+      .team {
+        font-size: 13px;
+      }
+
+      .team img {
+        width: 28px;
+        height: 28px;
+      }
+
+      .time {
+        font-size: 16px;
+      }
     }
   </style>
 </head>
@@ -111,8 +163,10 @@
     Partidos de hoy
   </div>
 
-  <div class="empty">
-    Cargando partidos...
+  <div id="contenedor">
+    <div class="empty">
+      Cargando partidos...
+    </div>
   </div>
 
 </main>
@@ -120,6 +174,170 @@
 <footer>
   BATIISTV · Resultados de fútbol
 </footer>
+
+<script>
+async function cargarPartidos() {
+
+  const contenedor = document.getElementById("contenedor");
+
+  try {
+
+    const respuesta = await fetch("/api/football");
+
+    if (!respuesta.ok) {
+      throw new Error("Error HTTP " + respuesta.status);
+    }
+
+    const datos = await respuesta.json();
+
+    console.log("Datos recibidos:", datos);
+
+    const partidos = datos.matches || datos.data?.matches || [];
+
+    if (!partidos.length) {
+      contenedor.innerHTML = `
+        <div class="empty">
+          No hay partidos disponibles.
+        </div>
+      `;
+      return;
+    }
+
+    const ligas = {};
+
+    partidos.forEach(partido => {
+
+      const liga = partido.league?.name || "Otros partidos";
+
+      if (!ligas[liga]) {
+        ligas[liga] = [];
+      }
+
+      ligas[liga].push(partido);
+
+    });
+
+    contenedor.innerHTML = "";
+
+    Object.entries(ligas).forEach(([nombreLiga, partidosLiga]) => {
+
+      const ligaHTML = document.createElement("div");
+
+      ligaHTML.className = "league";
+
+      ligaHTML.innerHTML = `
+        <div class="league-header">
+          ${nombreLiga}
+        </div>
+      `;
+
+      partidosLiga.forEach(partido => {
+
+        const local = partido.home_team?.team_name || "Local";
+        const visitante = partido.away_team?.team_name || "Visitante";
+
+        const logoLocal = partido.home_team?.team_logo || "";
+        const logoVisitante = partido.away_team?.team_logo || "";
+
+        const estado = partido.status_localized || "Scheduled";
+
+        let hora = "";
+
+        if (partido.match_date) {
+
+          const fecha = new Date(
+            partido.match_date.replace(" ", "T") + "Z"
+          );
+
+          hora = fecha.toLocaleTimeString("es-ES", {
+            hour: "2-digit",
+            minute: "2-digit"
+          });
+
+        }
+
+        let marcador = "";
+
+        if (estado.toLowerCase().includes("scheduled")) {
+
+          marcador = hora;
+
+        } else {
+
+          marcador = `
+            ${partido.score?.home ?? 0}
+            -
+            ${partido.score?.away ?? 0}
+          `;
+
+        }
+
+        const partidoHTML = document.createElement("div");
+
+        partidoHTML.className = "match";
+
+        partidoHTML.innerHTML = `
+
+          <div class="team home">
+
+            <span>${local}</span>
+
+            ${logoLocal
+              ? `<img src="${logoLocal}" alt="${local}">`
+              : ""
+            }
+
+          </div>
+
+          <div class="center">
+
+            <div class="time">
+              ${marcador}
+            </div>
+
+            <span class="status">
+              ${estado}
+            </span>
+
+          </div>
+
+          <div class="team away">
+
+            ${logoVisitante
+              ? `<img src="${logoVisitante}" alt="${visitante}">`
+              : ""
+            }
+
+            <span>${visitante}</span>
+
+          </div>
+
+        `;
+
+        ligaHTML.appendChild(partidoHTML);
+
+      });
+
+      contenedor.appendChild(ligaHTML);
+
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    contenedor.innerHTML = `
+      <div class="empty">
+        No se pudieron cargar los resultados.
+      </div>
+    `;
+
+  }
+
+}
+
+cargarPartidos();
+</script>
 
 </body>
 </html>
