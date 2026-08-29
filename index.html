@@ -7,186 +7,203 @@
   <title>BATIISTV - Resultados de fútbol</title>
 
   <style>
-* {
-  box-sizing: border-box;
-}
+    * {
+      box-sizing: border-box;
+    }
 
-body {
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background: #f1f3f5;
-  color: #111;
-}
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f1f3f5;
+      color: #111;
+    }
 
-header {
-  background: #0b7a3b;
-  color: white;
-  padding: 18px 20px;
-  box-shadow: 0 2px 8px rgba(0,0,0,.15);
-}
+    header {
+      background: #0b7a3b;
+      color: white;
+      padding: 18px 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.15);
+    }
 
-.header-inner {
-  max-width: 1100px;
-  margin: auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+    .header-inner {
+      max-width: 1100px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+    }
 
-.logo {
-  font-size: 28px;
-  font-weight: 900;
-  letter-spacing: 1px;
-}
+    .logo {
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
 
-.subtitle {
-  font-size: 14px;
-  opacity: .9;
-}
+    .subtitle {
+      font-size: 14px;
+      opacity: .9;
+      margin-top: 4px;
+    }
 
-.container {
-  max-width: 1100px;
-  margin: 25px auto;
-  padding: 0 15px;
-}
+    .container {
+      max-width: 1100px;
+      margin: 25px auto;
+      padding: 0 15px;
+    }
 
-.date {
-  background: white;
-  border-radius: 12px;
-  padding: 18px 20px;
-  margin-bottom: 20px;
-  font-size: 21px;
-  font-weight: 800;
-  box-shadow: 0 2px 8px rgba(0,0,0,.06);
-}
+    .date {
+      background: white;
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.06);
 
-.league {
-  background: white;
-  border-radius: 12px;
-  margin-bottom: 22px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,.07);
-}
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
 
-.league-header {
-  background: #0b7a3b;
-  color: white;
-  padding: 14px 18px;
-  font-size: 17px;
-  font-weight: 800;
-}
+    .date button {
+      border: none;
+      background: #0b7a3b;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
 
-.match {
-  display: grid;
-  grid-template-columns: 1fr 110px 1fr;
-  align-items: center;
-  min-height: 78px;
-  padding: 14px 20px;
-  border-bottom: 1px solid #eeeeee;
-  transition: background .15s;
-}
+    .date button:hover {
+      opacity: .9;
+    }
 
-.match:hover {
-  background: #f8f9fa;
-}
+    #fechaActual {
+      text-align: center;
+      font-size: 18px;
+      text-transform: capitalize;
+    }
 
-.match:last-child {
-  border-bottom: none;
-}
+    .league {
+      background: white;
+      border-radius: 12px;
+      margin-bottom: 22px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,.07);
+    }
 
-.team {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-weight: 700;
-  font-size: 15px;
-}
+    .league-header {
+      background: #0b7a3b;
+      color: white;
+      padding: 14px 18px;
+      font-size: 17px;
+      font-weight: 800;
+    }
 
-.team.home {
-  justify-content: flex-end;
-  text-align: right;
-}
+    .match {
+      display: grid;
+      grid-template-columns: 1fr 110px 1fr;
+      align-items: center;
+      min-height: 78px;
+      padding: 14px 20px;
+      border-bottom: 1px solid #eeeeee;
+    }
 
-.team.away {
-  justify-content: flex-start;
-}
+    .match:last-child {
+      border-bottom: none;
+    }
 
-.team img {
-  width: 38px;
-  height: 38px;
-  object-fit: contain;
-}
+    .team {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      font-size: 15px;
+    }
 
-.center {
-  text-align: center;
-}
+    .team.home {
+      justify-content: flex-end;
+      text-align: right;
+    }
 
-.time {
-  font-size: 18px;
-  font-weight: 900;
-}
+    .team.away {
+      justify-content: flex-start;
+    }
 
-.status {
-  display: block;
-  margin-top: 5px;
-  font-size: 11px;
-  font-weight: 600;
-  color: #777;
-}
+    .team img {
+      width: 38px;
+      height: 38px;
+      object-fit: contain;
+    }
 
-.no-games {
-  padding: 20px;
-  text-align: center;
-  color: #888;
-  font-size: 14px;
-}
+    .center {
+      text-align: center;
+    }
 
-.error {
-  background: white;
-  padding: 30px;
-  border-radius: 12px;
-  text-align: center;
-  color: #c00;
-}
+    .time {
+      font-size: 18px;
+      font-weight: 900;
+    }
 
-footer {
-  text-align: center;
-  padding: 35px 15px;
-  color: #888;
-  font-size: 13px;
-}
+    .status {
+      display: block;
+      margin-top: 5px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #777;
+    }
 
-@media (max-width: 650px) {
+    .no-games {
+      padding: 20px;
+      text-align: center;
+      color: #888;
+      font-size: 14px;
+    }
 
-  .header-inner {
-    display: block;
-    text-align: center;
-  }
+    .error {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      text-align: center;
+      color: #c00;
+    }
 
-  .subtitle {
-    margin-top: 5px;
-  }
+    footer {
+      text-align: center;
+      padding: 35px 15px;
+      color: #888;
+      font-size: 13px;
+    }
 
-  .match {
-    grid-template-columns: 1fr 65px 1fr;
-    padding: 12px 10px;
-  }
+    @media (max-width: 650px) {
 
-  .team {
-    font-size: 12px;
-    gap: 6px;
-  }
+      .date {
+        flex-direction: column;
+      }
 
-  .team img {
-    width: 30px;
-    height: 30px;
-  }
+      .date button {
+        width: 100%;
+      }
 
-  .time {
-    font-size: 15px;
-  }
-}
-</style>
+      .match {
+        grid-template-columns: 1fr 65px 1fr;
+        padding: 12px 10px;
+      }
+
+      .team {
+        font-size: 12px;
+        gap: 6px;
+      }
+
+      .team img {
+        width: 30px;
+        height: 30px;
+      }
+
+      .time {
+        font-size: 15px;
+      }
+    }
+  </style>
 </head>
 
 <body>
@@ -203,14 +220,21 @@ footer {
 <main class="container">
 
   <div class="date">
-  <button onclick="cambiarDia(-1)">← Ayer</button>
 
-  <strong id="fechaActual">
-    Hoy
-  </strong>
+    <button onclick="cambiarDia(-1)">
+      ← Ayer
+    </button>
 
-  <button onclick="cambiarDia(1)">Mañana →</button>
-</div>
+    <strong id="fechaActual">
+      Hoy
+    </strong>
+
+    <button onclick="cambiarDia(1)">
+      Mañana →
+    </button>
+
+  </div>
+
   <div id="contenedor">
     <div class="no-games">
       Cargando partidos...
@@ -239,12 +263,18 @@ const COMPETICIONES = {
   WC: "Mundial",
   EC: "Eurocopa"
 };
+
 let fechaSeleccionada = new Date();
 
 function formatoFecha(fecha) {
+
   const año = fecha.getFullYear();
-  const mes = String(fecha.getMonth() + 1).padStart(2, "0");
-  const dia = String(fecha.getDate()).padStart(2, "0");
+
+  const mes =
+    String(fecha.getMonth() + 1).padStart(2, "0");
+
+  const dia =
+    String(fecha.getDate()).padStart(2, "0");
 
   return `${año}-${mes}-${dia}`;
 }
@@ -252,7 +282,9 @@ function formatoFecha(fecha) {
 function mostrarFecha() {
 
   const ahora = new Date();
-  const elemento = document.getElementById("fechaActual");
+
+  const elemento =
+    document.getElementById("fechaActual");
 
   const seleccionada =
     formatoFecha(fechaSeleccionada);
@@ -261,7 +293,9 @@ function mostrarFecha() {
     formatoFecha(ahora);
 
   if (seleccionada === hoy) {
+
     elemento.textContent = "Hoy";
+
     return;
   }
 
@@ -283,37 +317,55 @@ function cambiarDia(dias) {
   );
 
   mostrarFecha();
+
   cargarPartidos();
 }
 
-mostrarFecha();
 async function cargarPartidos() {
 
-  const contenedor = document.getElementById("contenedor");
+  const contenedor =
+    document.getElementById("contenedor");
+
+  contenedor.innerHTML = `
+    <div class="no-games">
+      Cargando partidos...
+    </div>
+  `;
 
   try {
 
-    const fecha = formatoFecha(fechaSeleccionada);
+    const fecha =
+      formatoFecha(fechaSeleccionada);
 
-const respuesta = await fetch(
-  `/api/football?date=${fecha}`
-);
+    const respuesta =
+      await fetch(
+        `/api/football?date=${fecha}`
+      );
 
     if (!respuesta.ok) {
-      throw new Error("Error HTTP " + respuesta.status);
+
+      throw new Error(
+        "Error HTTP " + respuesta.status
+      );
+
     }
 
-    const datos = await respuesta.json();
+    const datos =
+      await respuesta.json();
 
-    console.log("Datos recibidos:", datos);
+    console.log(
+      "Datos recibidos:",
+      datos
+    );
 
-    const partidos = datos.matches || [];
+    const partidos =
+      datos.matches || [];
 
     if (!partidos.length) {
 
       contenedor.innerHTML = `
         <div class="no-games">
-          No hay partidos disponibles.
+          No hay partidos disponibles para este día.
         </div>
       `;
 
@@ -341,16 +393,21 @@ const respuesta = await fetch(
 
     contenedor.innerHTML = "";
 
-    Object.entries(COMPETICIONES).forEach(
-      ([codigo, nombre]) => {
+    Object.entries(COMPETICIONES)
+      .forEach(([codigo, nombre]) => {
 
         const partidosLiga =
           grupos[codigo] || [];
 
+        if (!partidosLiga.length) {
+          return;
+        }
+
         const ligaHTML =
           document.createElement("div");
 
-        ligaHTML.className = "league";
+        ligaHTML.className =
+          "league";
 
         ligaHTML.innerHTML = `
           <div class="league-header">
@@ -358,155 +415,158 @@ const respuesta = await fetch(
           </div>
         `;
 
-        if (!partidosLiga.length) {
+        partidosLiga.forEach(partido => {
 
-          ligaHTML.innerHTML += `
-            <div class="no-games">
-              No hay partidos hoy
+          const local =
+            partido.homeTeam?.name ||
+            "Local";
+
+          const visitante =
+            partido.awayTeam?.name ||
+            "Visitante";
+
+          const logoLocal =
+            partido.homeTeam?.crest ||
+            "";
+
+          const logoVisitante =
+            partido.awayTeam?.crest ||
+            "";
+
+          const estado =
+            partido.status ||
+            "SCHEDULED";
+
+          let hora = "";
+
+          if (partido.utcDate) {
+
+            const fecha =
+              new Date(partido.utcDate);
+
+            hora =
+              fecha.toLocaleTimeString(
+                "es-ES",
+                {
+                  hour: "2-digit",
+                  minute: "2-digit"
+                }
+              );
+          }
+
+          let marcador = hora;
+
+          if (
+            estado === "IN_PLAY" ||
+            estado === "PAUSED" ||
+            estado === "FINISHED"
+          ) {
+
+            marcador = `
+              ${partido.score?.fullTime?.home ?? 0}
+              -
+              ${partido.score?.fullTime?.away ?? 0}
+            `;
+          }
+
+          let estadoTexto =
+            "Programado";
+
+          if (estado === "IN_PLAY") {
+            estadoTexto =
+              "EN DIRECTO";
+          }
+
+          if (estado === "PAUSED") {
+            estadoTexto =
+              "DESCANSO";
+          }
+
+          if (estado === "FINISHED") {
+            estadoTexto =
+              "Finalizado";
+          }
+
+          if (estado === "POSTPONED") {
+            estadoTexto =
+              "Aplazado";
+          }
+
+          const partidoHTML =
+            document.createElement("div");
+
+          partidoHTML.className =
+            "match";
+
+          partidoHTML.innerHTML = `
+
+            <div class="team home">
+
+              <span>
+                ${local}
+              </span>
+
+              ${
+                logoLocal
+                  ? `<img
+                      src="${logoLocal}"
+                      alt="${local}"
+                    >`
+                  : ""
+              }
+
+            </div>
+
+            <div class="center">
+
+              <div class="time">
+                ${marcador}
+              </div>
+
+              <span class="status">
+                ${estadoTexto}
+              </span>
+
+            </div>
+
+            <div class="team away">
+
+              ${
+                logoVisitante
+                  ? `<img
+                      src="${logoVisitante}"
+                      alt="${visitante}"
+                    >`
+                  : ""
+              }
+
+              <span>
+                ${visitante}
+              </span>
+
             </div>
           `;
 
-        } else {
+          ligaHTML.appendChild(
+            partidoHTML
+          );
 
-          partidosLiga.forEach(partido => {
+        });
 
-            const local =
-              partido.homeTeam?.name ||
-              "Local";
+        contenedor.appendChild(
+          ligaHTML
+        );
 
-            const visitante =
-              partido.awayTeam?.name ||
-              "Visitante";
+      });
 
-            const logoLocal =
-              partido.homeTeam?.crest ||
-              "";
+    if (!contenedor.children.length) {
 
-            const logoVisitante =
-              partido.awayTeam?.crest ||
-              "";
-
-            const estado =
-              partido.status ||
-              "SCHEDULED";
-
-            let hora = "";
-
-            if (partido.utcDate) {
-
-              const fecha =
-                new Date(partido.utcDate);
-
-              hora =
-                fecha.toLocaleTimeString(
-                  "es-ES",
-                  {
-                    hour: "2-digit",
-                    minute: "2-digit"
-                  }
-                );
-
-            }
-
-            let marcador = hora;
-
-            if (
-              estado === "IN_PLAY" ||
-              estado === "PAUSED" ||
-              estado === "FINISHED"
-            ) {
-
-              marcador = `
-                ${partido.score?.fullTime?.home ?? 0}
-                -
-                ${partido.score?.fullTime?.away ?? 0}
-              `;
-
-            }
-
-            let estadoTexto = "Programado";
-
-            if (estado === "IN_PLAY") {
-              estadoTexto = "EN DIRECTO";
-            }
-
-            if (estado === "PAUSED") {
-              estadoTexto = "DESCANSO";
-            }
-
-            if (estado === "FINISHED") {
-              estadoTexto = "Finalizado";
-            }
-
-            if (estado === "POSTPONED") {
-              estadoTexto = "Aplazado";
-            }
-
-            const partidoHTML =
-              document.createElement("div");
-
-            partidoHTML.className = "match";
-
-            partidoHTML.innerHTML = `
-
-              <div class="team home">
-
-                <span>
-                  ${local}
-                </span>
-
-                ${
-                  logoLocal
-                    ? `<img
-                        src="${logoLocal}"
-                        alt="${local}"
-                      >`
-                    : ""
-                }
-
-              </div>
-
-              <div class="center">
-
-                <div class="time">
-                  ${marcador}
-                </div>
-
-                <span class="status">
-                  ${estadoTexto}
-                </span>
-
-              </div>
-
-              <div class="team away">
-
-                ${
-                  logoVisitante
-                    ? `<img
-                        src="${logoVisitante}"
-                        alt="${visitante}"
-                      >`
-                    : ""
-                }
-
-                <span>
-                  ${visitante}
-                </span>
-
-              </div>
-
-            `;
-
-            ligaHTML.appendChild(partidoHTML);
-
-          });
-
-        }
-
-        contenedor.appendChild(ligaHTML);
-
-      }
-    );
+      contenedor.innerHTML = `
+        <div class="no-games">
+          No hay partidos de las competiciones seleccionadas para este día.
+        </div>
+      `;
+    }
 
   } catch (error) {
 
@@ -514,13 +574,13 @@ const respuesta = await fetch(
 
     contenedor.innerHTML = `
       <div class="error">
-        No se pudieron cargar los resultados.
+        No se pudieron cargar los partidos.
       </div>
     `;
-
   }
-
 }
+
+mostrarFecha();
 
 cargarPartidos();
 
