@@ -13,13 +13,16 @@ export default async function handler(req, res) {
       new Date().toISOString().slice(0, 10);
 
     const competiciones = [
-  "PL",
-  "PD",
-  "CL",
-  "EL",
-  "BL1",
-  "SA",
-  "FL1"
+  "PL",   // Premier League
+  "PD",   // LaLiga
+  "CL",   // Champions League
+  "EL",   // Europa League
+  "BL1",  // Bundesliga
+  "SA",   // Serie A
+  "FL1",  // Ligue 1
+  "DED",  // Eredivisie
+  "PPL",  // Primeira Liga
+  "BSA"   // Brasileirão
 ];
     const resultados = await Promise.all(
       competiciones.map(async (codigo) => {
