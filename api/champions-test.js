@@ -19,12 +19,9 @@ export default async function handler(req, res) {
 
     const datos = await respuesta.json();
 
-    return res.status(200).json({
-      cantidad: datos.data?.length || 0,
-      ultimo: datos.data?.slice(-5) || [],
-      primero: datos.data?.slice(0, 5) || []
-    });
-
+    return res.status(200).json(
+  datos.data?.[0] || {}
+);
   } catch (error) {
     return res.status(500).json({
       error: error.message
