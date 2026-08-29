@@ -203,9 +203,14 @@ footer {
 <main class="container">
 
   <div class="date">
-    Partidos de hoy
-  </div>
+  <button onclick="cambiarDia(-1)">← Ayer</button>
 
+  <strong id="fechaActual">
+    Hoy
+  </strong>
+
+  <button onclick="cambiarDia(1)">Mañana →</button>
+</div>
   <div id="contenedor">
     <div class="no-games">
       Cargando partidos...
