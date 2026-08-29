@@ -13,24 +13,27 @@ export default async function handler(req, res) {
       new Date().toISOString().slice(0, 10);
 
     const competiciones = [
-  "PL",
-  "PD",
-  "CL",
-  "EL",
-  "BL1",
-  "SA",
-  "FL1",
-  "DED",
-  "PPL",
-  "BSA"
-];
-    const competenciaPrueba = req.query.competition;
+      "PL",
+      "PD",
+      "CL",
+      "EL",
+      "BL1",
+      "SA",
+      "FL1",
+      "DED",
+      "PPL",
+      "BSA"
+    ];
 
-const listaCompeticiones = competenciaPrueba
-  ? [competenciaPrueba]
-  : competiciones;
+    const competenciaSolicitada =
+      req.query.competition;
+
+    const lista = competenciaSolicitada
+      ? [competenciaSolicitada]
+      : competiciones;
+
     const resultados = await Promise.all(
-      listaCompeticiones.map(async (codigo) => {
+      lista.map(async (codigo) => {
 
         const url =
           `https://api.football-data.org/v4/competitions/${codigo}/matches?dateFrom=${fecha}&dateTo=${fecha}`;
@@ -47,14 +50,20 @@ const listaCompeticiones = competenciaPrueba
 
         const datos = await respuesta.json();
 
-        return datos.matches || [];
+        return (datos.matches || []).map(partido => ({
+          ...partido,
+          competitionCode: codigo
+        }));
       })
     );
 
-    const matches =
-      resultados.flat();
+    const matches = resultados.flat();
 
     return res.status(200).json({
+      filters: {
+        date: fecha,
+        competition: competenciaSolicitada || "ALL"
+      },
       resultSet: {
         count: matches.length
       },
