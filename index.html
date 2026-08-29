@@ -84,13 +84,13 @@
       font-weight: 600;
     }
 
-    .team.away {
-      justify-content: flex-start;
-    }
-
     .team.home {
       justify-content: flex-end;
       text-align: right;
+    }
+
+    .team.away {
+      justify-content: flex-start;
     }
 
     .team img {
@@ -116,11 +116,18 @@
       font-weight: normal;
     }
 
-    .empty {
+    .no-games {
+      padding: 18px;
+      text-align: center;
+      color: #777;
+    }
+
+    .error {
       background: white;
       padding: 25px;
       border-radius: 10px;
       text-align: center;
+      color: #c00;
     }
 
     footer {
@@ -164,7 +171,7 @@
   </div>
 
   <div id="contenedor">
-    <div class="empty">
+    <div class="no-games">
       Cargando partidos...
     </div>
   </div>
@@ -176,6 +183,30 @@
 </footer>
 
 <script>
+
+const LIGAS = [
+  {
+    nombre: "LaLiga",
+    id: 10
+  },
+  {
+    nombre: "Premier League",
+    id: 15
+  },
+  {
+    nombre: "Serie A",
+    id: 17
+  },
+  {
+    nombre: "Bundesliga",
+    id: 18
+  },
+  {
+    nombre: "Ligue 1",
+    id: 16
+  }
+];
+
 async function cargarPartidos() {
 
   const contenedor = document.getElementById("contenedor");
@@ -192,34 +223,26 @@ async function cargarPartidos() {
 
     console.log("Datos recibidos:", datos);
 
-    const partidos = datos.matches || datos.data?.matches || [];
-
-    if (!partidos.length) {
-      contenedor.innerHTML = `
-        <div class="empty">
-          No hay partidos disponibles.
-        </div>
-      `;
-      return;
-    }
-
-    const ligas = {};
-
-    partidos.forEach(partido => {
-
-      const liga = partido.league?.name || "Otros partidos";
-
-      if (!ligas[liga]) {
-        ligas[liga] = [];
-      }
-
-      ligas[liga].push(partido);
-
-    });
+    const partidos =
+      datos.matches ||
+      datos.data?.matches ||
+      [];
 
     contenedor.innerHTML = "";
 
-    Object.entries(ligas).forEach(([nombreLiga, partidosLiga]) => {
+    /*
+      Creamos siempre las 5 ligas.
+      Si una liga no tiene partidos ese día,
+      mostramos "No hay partidos".
+    */
+
+    LIGAS.forEach(liga => {
+
+      const partidosLiga = partidos.filter(partido => {
+
+        return Number(partido.league?.league_id) === liga.id;
+
+      });
 
       const ligaHTML = document.createElement("div");
 
@@ -227,96 +250,138 @@ async function cargarPartidos() {
 
       ligaHTML.innerHTML = `
         <div class="league-header">
-          ${nombreLiga}
+          ${liga.nombre}
         </div>
       `;
 
-      partidosLiga.forEach(partido => {
+      if (partidosLiga.length === 0) {
 
-        const local = partido.home_team?.team_name || "Local";
-        const visitante = partido.away_team?.team_name || "Visitante";
-
-        const logoLocal = partido.home_team?.team_logo || "";
-        const logoVisitante = partido.away_team?.team_logo || "";
-
-        const estado = partido.status_localized || "Scheduled";
-
-        let hora = "";
-
-        if (partido.match_date) {
-
-          const fecha = new Date(
-            partido.match_date.replace(" ", "T") + "Z"
-          );
-
-          hora = fecha.toLocaleTimeString("es-ES", {
-            hour: "2-digit",
-            minute: "2-digit"
-          });
-
-        }
-
-        let marcador = "";
-
-        if (estado.toLowerCase().includes("scheduled")) {
-
-          marcador = hora;
-
-        } else {
-
-          marcador = `
-            ${partido.score?.home ?? 0}
-            -
-            ${partido.score?.away ?? 0}
-          `;
-
-        }
-
-        const partidoHTML = document.createElement("div");
-
-        partidoHTML.className = "match";
-
-        partidoHTML.innerHTML = `
-
-          <div class="team home">
-
-            <span>${local}</span>
-
-            ${logoLocal
-              ? `<img src="${logoLocal}" alt="${local}">`
-              : ""
-            }
-
+        ligaHTML.innerHTML += `
+          <div class="no-games">
+            No hay partidos hoy
           </div>
-
-          <div class="center">
-
-            <div class="time">
-              ${marcador}
-            </div>
-
-            <span class="status">
-              ${estado}
-            </span>
-
-          </div>
-
-          <div class="team away">
-
-            ${logoVisitante
-              ? `<img src="${logoVisitante}" alt="${visitante}">`
-              : ""
-            }
-
-            <span>${visitante}</span>
-
-          </div>
-
         `;
 
-        ligaHTML.appendChild(partidoHTML);
+      } else {
 
-      });
+        partidosLiga.forEach(partido => {
+
+          const local =
+            partido.home_team?.team_name ||
+            "Local";
+
+          const visitante =
+            partido.away_team?.team_name ||
+            "Visitante";
+
+          const logoLocal =
+            partido.home_team?.team_logo ||
+            "";
+
+          const logoVisitante =
+            partido.away_team?.team_logo ||
+            "";
+
+          const estado =
+            partido.status_localized ||
+            "Scheduled";
+
+          let hora = "";
+
+          if (partido.match_date) {
+
+            const fecha = new Date(
+              partido.match_date.replace(" ", "T") + "Z"
+            );
+
+            hora = fecha.toLocaleTimeString(
+              "es-ES",
+              {
+                hour: "2-digit",
+                minute: "2-digit"
+              }
+            );
+
+          }
+
+          let marcador;
+
+          if (
+            estado.toLowerCase().includes("scheduled")
+          ) {
+
+            marcador = hora;
+
+          } else {
+
+            marcador = `
+              ${partido.score?.home ?? 0}
+              -
+              ${partido.score?.away ?? 0}
+            `;
+
+          }
+
+          const partidoHTML =
+            document.createElement("div");
+
+          partidoHTML.className = "match";
+
+          partidoHTML.innerHTML = `
+
+            <div class="team home">
+
+              <span>
+                ${local}
+              </span>
+
+              ${
+                logoLocal
+                  ? `<img
+                      src="${logoLocal}"
+                      alt="${local}"
+                    >`
+                  : ""
+              }
+
+            </div>
+
+            <div class="center">
+
+              <div class="time">
+                ${marcador}
+              </div>
+
+              <span class="status">
+                ${estado}
+              </span>
+
+            </div>
+
+            <div class="team away">
+
+              ${
+                logoVisitante
+                  ? `<img
+                      src="${logoVisitante}"
+                      alt="${visitante}"
+                    >`
+                  : ""
+              }
+
+              <span>
+                ${visitante}
+              </span>
+
+            </div>
+
+          `;
+
+          ligaHTML.appendChild(partidoHTML);
+
+        });
+
+      }
 
       contenedor.appendChild(ligaHTML);
 
@@ -327,7 +392,7 @@ async function cargarPartidos() {
     console.error(error);
 
     contenedor.innerHTML = `
-      <div class="empty">
+      <div class="error">
         No se pudieron cargar los resultados.
       </div>
     `;
@@ -337,6 +402,7 @@ async function cargarPartidos() {
 }
 
 cargarPartidos();
+
 </script>
 
 </body>
