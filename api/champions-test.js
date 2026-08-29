@@ -8,38 +8,21 @@ export default async function handler(req, res) {
       });
     }
 
-    const fecha = req.query.date;
-
-    let url =
-      "https://api.zafronix.com/uefa/championsleague/v1/matches?year=2026";
-
-    const respuesta = await fetch(url, {
-      headers: {
-        "X-API-Key": key
+    const respuesta = await fetch(
+      "https://api.zafronix.com/uefa/championsleague/v1/matches?year=2026",
+      {
+        headers: {
+          "X-API-Key": key
+        }
       }
-    });
+    );
 
     const datos = await respuesta.json();
 
-    if (!respuesta.ok) {
-      return res.status(respuesta.status).json(datos);
-    }
-
-    let partidos = datos.data || [];
-
-return res.status(200).json({
-  primeros: partidos.slice(0, 10)
-});
-
-    if (fecha) {
-      partidos = partidos.filter(
-        partido => partido.date === fecha
-      );
-    }
-
     return res.status(200).json({
-      count: partidos.length,
-      matches: partidos
+      cantidad: datos.data?.length || 0,
+      ultimo: datos.data?.slice(-5) || [],
+      primero: datos.data?.slice(0, 5) || []
     });
 
   } catch (error) {
