@@ -7,154 +7,186 @@
   <title>BATIISTV - Resultados de fútbol</title>
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
+* {
+  box-sizing: border-box;
+}
 
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f3f4f6;
-      color: #111;
-    }
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f1f3f5;
+  color: #111;
+}
 
-    header {
-      background: #168c45;
-      color: white;
-      padding: 22px 15px;
-      text-align: center;
-    }
+header {
+  background: #0b7a3b;
+  color: white;
+  padding: 18px 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.15);
+}
 
-    header h1 {
-      margin: 0;
-      font-size: 30px;
-    }
+.header-inner {
+  max-width: 1100px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
-    header p {
-      margin: 6px 0 0;
-    }
+.logo {
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
 
-    .container {
-      max-width: 950px;
-      margin: 25px auto;
-      padding: 0 15px;
-    }
+.subtitle {
+  font-size: 14px;
+  opacity: .9;
+}
 
-    .date {
-      background: white;
-      padding: 15px;
-      border-radius: 10px;
-      margin-bottom: 18px;
-      font-size: 20px;
-      font-weight: bold;
-    }
+.container {
+  max-width: 1100px;
+  margin: 25px auto;
+  padding: 0 15px;
+}
 
-    .league {
-      background: white;
-      border-radius: 10px;
-      margin-bottom: 20px;
-      overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,.06);
-    }
+.date {
+  background: white;
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-bottom: 20px;
+  font-size: 21px;
+  font-weight: 800;
+  box-shadow: 0 2px 8px rgba(0,0,0,.06);
+}
 
-    .league-header {
-      background: #168c45;
-      color: white;
-      padding: 13px 16px;
-      font-weight: bold;
-      font-size: 17px;
-    }
+.league {
+  background: white;
+  border-radius: 12px;
+  margin-bottom: 22px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,.07);
+}
 
-    .match {
-      display: grid;
-      grid-template-columns: 1fr 120px 1fr;
-      align-items: center;
-      padding: 17px 15px;
-      border-bottom: 1px solid #eee;
-    }
+.league-header {
+  background: #0b7a3b;
+  color: white;
+  padding: 14px 18px;
+  font-size: 17px;
+  font-weight: 800;
+}
 
-    .match:last-child {
-      border-bottom: none;
-    }
+.match {
+  display: grid;
+  grid-template-columns: 1fr 110px 1fr;
+  align-items: center;
+  min-height: 78px;
+  padding: 14px 20px;
+  border-bottom: 1px solid #eeeeee;
+  transition: background .15s;
+}
 
-    .team {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 600;
-    }
+.match:hover {
+  background: #f8f9fa;
+}
 
-    .team.home {
-      justify-content: flex-end;
-      text-align: right;
-    }
+.match:last-child {
+  border-bottom: none;
+}
 
-    .team.away {
-      justify-content: flex-start;
-    }
+.team {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 700;
+  font-size: 15px;
+}
 
-    .team img {
-      width: 34px;
-      height: 34px;
-      object-fit: contain;
-    }
+.team.home {
+  justify-content: flex-end;
+  text-align: right;
+}
 
-    .center {
-      text-align: center;
-      font-weight: bold;
-    }
+.team.away {
+  justify-content: flex-start;
+}
 
-    .time {
-      font-size: 18px;
-    }
+.team img {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+}
 
-    .status {
-      display: block;
-      margin-top: 5px;
-      font-size: 12px;
-      color: #777;
-      font-weight: normal;
-    }
+.center {
+  text-align: center;
+}
 
-    .no-games {
-      padding: 18px;
-      text-align: center;
-      color: #777;
-    }
+.time {
+  font-size: 18px;
+  font-weight: 900;
+}
 
-    .error {
-      background: white;
-      padding: 25px;
-      border-radius: 10px;
-      text-align: center;
-      color: #c00;
-    }
+.status {
+  display: block;
+  margin-top: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #777;
+}
 
-    footer {
-      text-align: center;
-      padding: 30px;
-      color: #777;
-    }
+.no-games {
+  padding: 20px;
+  text-align: center;
+  color: #888;
+  font-size: 14px;
+}
 
-    @media (max-width: 600px) {
-      .match {
-        grid-template-columns: 1fr 75px 1fr;
-      }
+.error {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+  color: #c00;
+}
 
-      .team {
-        font-size: 13px;
-      }
+footer {
+  text-align: center;
+  padding: 35px 15px;
+  color: #888;
+  font-size: 13px;
+}
 
-      .team img {
-        width: 28px;
-        height: 28px;
-      }
+@media (max-width: 650px) {
 
-      .time {
-        font-size: 16px;
-      }
-    }
-  </style>
+  .header-inner {
+    display: block;
+    text-align: center;
+  }
+
+  .subtitle {
+    margin-top: 5px;
+  }
+
+  .match {
+    grid-template-columns: 1fr 65px 1fr;
+    padding: 12px 10px;
+  }
+
+  .team {
+    font-size: 12px;
+    gap: 6px;
+  }
+
+  .team img {
+    width: 30px;
+    height: 30px;
+  }
+
+  .time {
+    font-size: 15px;
+  }
+}
+</style>
 </head>
 
 <body>
