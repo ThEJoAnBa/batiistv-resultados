@@ -30,7 +30,7 @@ const listaCompeticiones = competenciaPrueba
   ? [competenciaPrueba]
   : competiciones;
     const resultados = await Promise.all(
-      competiciones.map(async (codigo) => {
+      listaCompeticiones.map(async (codigo) => {
 
         const url =
           `https://api.football-data.org/v4/competitions/${codigo}/matches?dateFrom=${fecha}&dateTo=${fecha}`;
