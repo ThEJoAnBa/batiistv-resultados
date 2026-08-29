@@ -1,22 +1,18 @@
 export default async function handler(req, res) {
   try {
-    const apiKey = process.env.FOOTBALLDATA_API_KEY;
+    const token = process.env.FOOTBALL_DATA_API_TOKEN;
 
-    if (!apiKey) {
+    if (!token) {
       return res.status(500).json({
-        error: "Falta configurar FOOTBALLDATA_API_KEY en Vercel."
+        error: "Falta configurar FOOTBALL_DATA_API_TOKEN en Vercel."
       });
     }
 
-    const fecha =
-      req.query.date || new Date().toISOString().split("T")[0];
-
     const response = await fetch(
-      `https://footballdata.io/api/v1/matches/date/${fecha}`,
+      "https://api.football-data.org/v4/matches",
       {
         headers: {
-          Authorization: `Bearer ${apiKey}`,
-          Accept: "application/json"
+          "X-Auth-Token": token
         }
       }
     );
