@@ -9,7 +9,7 @@ export default async function handler(req, res) {
     }
 
     const respuesta = await fetch(
-      "https://api.zafronix.com/uefa/championsleague/v1/matches?limit=500&order=desc",
+      "https://api.zafronix.com/uefa/championsleague/v1/matches?season=2026",
       {
         headers: {
           "X-API-Key": key
