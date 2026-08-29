@@ -27,6 +27,10 @@ export default async function handler(req, res) {
 
     let partidos = datos.data || [];
 
+return res.status(200).json({
+  primeros: partidos.slice(0, 10)
+});
+
     if (fecha) {
       partidos = partidos.filter(
         partido => partido.date === fecha
