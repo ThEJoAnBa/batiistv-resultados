@@ -13,15 +13,9 @@ export default async function handler(req, res) {
       new Date().toISOString().slice(0, 10);
 
     const competiciones = [
-      "PL",
-      "PD",
-      "BL1",
-      "SA",
-      "FL1",
-      "CL",
-      "EL"
-    ];
-
+  "PL",
+  "PD"
+];
     const resultados = await Promise.all(
       competiciones.map(async (codigo) => {
 
