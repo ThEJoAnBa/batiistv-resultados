@@ -8,8 +8,22 @@ export default async function handler(req, res) {
       });
     }
 
-    const response = await fetch(
-      "https://api.football-data.org/v4/matches",
+    const fecha = req.query.date;
+
+let url = "https://api.football-data.org/v4/matches";
+
+if (fecha) {
+  url += `?dateFrom=${fecha}&dateTo=${fecha}`;
+}
+
+const response = await fetch(
+  url,
+  {
+    headers: {
+      "X-Auth-Token": token
+    }
+  }
+);
       {
         headers: {
           "X-Auth-Token": token
