@@ -15,7 +15,8 @@ export default async function handler(req, res) {
     const competiciones = [
   "PL",
   "PD",
-  "CL"
+  "CL",
+  "EL"
 ];
     const resultados = await Promise.all(
       competiciones.map(async (codigo) => {
