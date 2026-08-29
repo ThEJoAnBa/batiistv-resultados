@@ -18,7 +18,8 @@ export default async function handler(req, res) {
   "CL",
   "EL",
   "BL1",
-  "SA"
+  "SA",
+  "FL1"
 ];
     const resultados = await Promise.all(
       competiciones.map(async (codigo) => {
