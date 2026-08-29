@@ -24,6 +24,11 @@ export default async function handler(req, res) {
   "PPL",
   "BSA"
 ];
+    const competenciaPrueba = req.query.competition;
+
+const listaCompeticiones = competenciaPrueba
+  ? [competenciaPrueba]
+  : competiciones;
     const resultados = await Promise.all(
       competiciones.map(async (codigo) => {
 
