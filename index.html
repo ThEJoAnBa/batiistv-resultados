@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BATIISTV - Resultados de fútbol</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      color: #222;
+    }
+
+    header {
+      background: #168c45;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 25px auto;
+      padding: 0 15px;
+    }
+
+    .date {
+      background: white;
+      padding: 15px;
+      margin-bottom: 15px;
+      font-size: 20px;
+      font-weight: bold;
+      border-radius: 8px;
+    }
+
+    .league {
+      background: white;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .league-title {
+      background: #168c45;
+      color: white;
+      padding: 12px 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .match {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      padding: 18px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .team.away {
+      text-align: right;
+    }
+
+    .score {
+      text-align: center;
+      font-weight: bold;
+      padding: 0 20px;
+    }
+
+    .status {
+      display: block;
+      font-size: 12px;
+      color: #777;
+      margin-top: 5px;
+    }
+
+    .empty {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px;
+      color: #777;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>BATIISTV</h1>
+  <p>Resultados de fútbol</p>
+</header>
+
+<main class="container">
+
+  <div class="date">
+    Partidos de hoy
+  </div>
+
+  <div class="empty">
+    Cargando partidos...
+  </div>
+
+</main>
+
+<footer>
+  BATIISTV · Resultados de fútbol
+</footer>
+
+</body>
+</html>
