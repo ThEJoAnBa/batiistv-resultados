@@ -8,26 +8,54 @@ export default async function handler(req, res) {
       });
     }
 
-    const fecha = req.query.date;
+    const fecha =
+      req.query.date ||
+      new Date().toISOString().slice(0, 10);
 
-    let url = "https://api.football-data.org/v4/matches";
+    const competiciones = [
+      "PL",
+      "PD",
+      "BL1",
+      "SA",
+      "FL1",
+      "CL",
+      "EL"
+    ];
 
-    if (fecha) {
-      url += "?dateFrom=" + encodeURIComponent(fecha);
-      url += "&dateTo=" + encodeURIComponent(fecha);
-    }
+    const resultados = await Promise.all(
+      competiciones.map(async (codigo) => {
 
-    const response = await fetch(url, {
-      headers: {
-        "X-Auth-Token": token
-      }
+        const url =
+          `https://api.football-data.org/v4/competitions/${codigo}/matches?dateFrom=${fecha}&dateTo=${fecha}`;
+
+        const respuesta = await fetch(url, {
+          headers: {
+            "X-Auth-Token": token
+          }
+        });
+
+        if (!respuesta.ok) {
+          return [];
+        }
+
+        const datos = await respuesta.json();
+
+        return datos.matches || [];
+      })
+    );
+
+    const matches =
+      resultados.flat();
+
+    return res.status(200).json({
+      resultSet: {
+        count: matches.length
+      },
+      matches
     });
 
-    const data = await response.json();
-
-    return res.status(response.status).json(data);
-
   } catch (error) {
+
     console.error(error);
 
     return res.status(500).json({
